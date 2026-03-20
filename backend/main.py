@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import sqlite3
 from contextlib import contextmanager
 from datetime import date, datetime, timedelta
@@ -13,12 +14,18 @@ from pydantic import BaseModel, Field
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "devtrails.db"
+DEFAULT_DB_PATH = "/tmp/devtrails.db" if os.getenv("VERCEL") else str(BASE_DIR / "devtrails.db")
+DB_PATH = Path(os.getenv("DATABASE_PATH", DEFAULT_DB_PATH))
 
 app = FastAPI(title="DEVTrails FastAPI Backend", version="1.0.0")
+cors_origins = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

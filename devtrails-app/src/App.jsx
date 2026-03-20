@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-const API_BASE = 'http://localhost:8000/api'
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? 'http://localhost:8000/api' : '/api')
 const triggerPlaybook = [
   {
     title: 'Heavy Rain',
@@ -319,7 +321,7 @@ function App() {
         <div className="hero-card">
           <p className="mini-label">Supported Personas</p>
           <strong>Food, grocery, and e-commerce delivery partners</strong>
-          <p>Backend: Spring Boot | Frontend: React | AI: FastAPI</p>
+          <p>Backend: FastAPI | Frontend: React | AI: Python microservice</p>
         </div>
       </section>
 
